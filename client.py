@@ -20,8 +20,8 @@ from datetime import datetime
 API_URL = "http://localhost:8000/predict"
 
 
-def send_generate_request(image, x, y, alpha):
-    response = requests.post(API_URL, files={"image": image, "x": (None, x), "y": (None, y), "alpha": (None, alpha)})
+def send_generate_request(image, p1, p2, alpha):
+    response = requests.post(API_URL, files={"image": image, "p1": (None, p1), "p2": (None, p2), "alpha": (None, alpha)})
 
     if response.status_code == 200:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").lower()
@@ -37,11 +37,11 @@ def send_generate_request(image, x, y, alpha):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send text & image to Pixtral server and receive a response.")
-    parser.add_argument("--image", required=True, help="URL for the image file")
-    parser.add_argument("--x", required=True, help="X coord of the item")
-    parser.add_argument("--y", required=True, help="Y coord of the item")
-    parser.add_argument("--alpha", required=False, help="Transparency mask between 0-1", default="0.8")
+    parser.add_argument("--image", required=True, help="URL for the image file.")
+    parser.add_argument("--p1", required=False, help="Single Point input in '(x,y)' format.")
+    parser.add_argument("--p2", required=False, help="Point2 '(x1,y1)' for box input.")
+    parser.add_argument("--alpha", required=False, help="Transparency mask between 0-1.", default="0.5")
 
     args = parser.parse_args()
 
-    send_generate_request(args.image, args.x, args.y, args.alpha)
+    send_generate_request(args.image, args.p1, args.p2, args.alpha)
