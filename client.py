@@ -20,8 +20,9 @@ from datetime import datetime
 API_URL = "http://localhost:8000/predict"
 
 
-def send_generate_request(image, p1, p2, alpha):
-    response = requests.post(API_URL, files={"image": image, "p1": (None, p1), "p2": (None, p2), "alpha": (None, alpha)})
+def send_generate_request(image, p1, p2, model, alpha):
+    response = requests.post(API_URL, files={"image": image, "p1": (None, p1), "p2": (None, p2),
+                                             "alpha": (None, alpha), "model": (None, model)})
 
     if response.status_code == 200:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").lower()
@@ -40,8 +41,9 @@ if __name__ == "__main__":
     parser.add_argument("--image", required=True, help="URL for the image file.")
     parser.add_argument("--p1", required=False, help="Single Point input in '(x,y)' format.")
     parser.add_argument("--p2", required=False, help="Point2 '(x1,y1)' for box input.")
+    parser.add_argument("--model", required=False, help="Model used for inference", default="med_sam-vit_b")
     parser.add_argument("--alpha", required=False, help="Transparency mask between 0-1.", default="0.5")
 
     args = parser.parse_args()
 
-    send_generate_request(args.image, args.p1, args.p2, args.alpha)
+    send_generate_request(args.image, args.p1, args.p2, args.model, args.alpha)
