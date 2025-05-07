@@ -73,7 +73,7 @@ class Sam_API(ls.LitAPI):
         alpha = input[4] if (0 <= input[4] <= 1) else 0.8
         print(model)
         # print(point2)
-        original_image.show()
+        # original_image.show()
         with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
             self.predictors[model].set_image(np.array(original_image.convert("RGB")))
             if point1 and point2:  # box input
@@ -99,7 +99,7 @@ class Sam_API(ls.LitAPI):
             # Paste the original image into the cutout image, using the mask as the alpha channel
             cutout_image = Image.new('RGBA', original_image.size, color="green")
             cutout_image.paste(original_image, (0, 0), mask=mask_image)
-            cutout_image.show()
+            # cutout_image.show()
             return cutout_image
 
     def encode_response(self, content):
