@@ -2,7 +2,7 @@
 
 """
 usage example:
-python MedSAM_Inference.py -i assets/img_demo.png -o ./ --box "[95,255,190,350]"
+python MedSAM_Inference_SS.py -i assets/img_demo.png -o ./ --box "[95,255,190,350]"
 
 """
 
@@ -80,7 +80,7 @@ parser.add_argument(
     "-i",
     "--data_path",
     type=str,
-    default="data/BCSS_small/val/TCGA-A1-A0SK-DX1_xmin45749_ymin25055_MPP-0_0_2016_size224.png",
+    default="data/BCSS_small/images/TCGA-A1-A0SK-DX1_xmin45749_ymin25055_MPP-0_0_2016_size224.png",
     help="path to the data folder",
 )
 parser.add_argument(
@@ -142,7 +142,7 @@ io.imsave(
     check_contrast=False,
 )
 
-# %% visualize results
+# %% visualize Results
 fig, ax = plt.subplots(1, 2, figsize=(10, 5))
 ax[0].imshow(img_3c)
 show_box(box_np[0], ax[0])
