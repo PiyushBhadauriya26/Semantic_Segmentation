@@ -1,6 +1,7 @@
 # Setup
 Use Python 3.12
 Use virtual env
+install pytorch https://pytorch.org/get-started/locally/#windows-python
 Use requirements.txt to install the required python libs
 
 
@@ -52,3 +53,8 @@ options:
 ### Example
 - `python .\batch_inference.py -i "data/BCSS_small/test/images" --overwrite True` # Run inference and save predicted masks in data/Results folder
 
+### Train
+- Source: https://github.com/WangRongsheng/SAM-fine-tune
+- Update `config.yaml` for DATASET paths, CHECKPOINT for base sam model and TRAIN setting
+- `python train.py` # Start training.
+- After training lora weights are saved as safetensors file in model_checkpoint folder
