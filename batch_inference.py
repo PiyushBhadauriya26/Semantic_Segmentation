@@ -46,14 +46,14 @@ parser.add_argument(
     "-i",
     "--data_path",
     type=str,
-    default="data\BCSS_small\images",
+    default="data/BCSS_small/images",
     help="path to the data folder",
 )
 parser.add_argument(
     "-o",
     "--seg_path",
     type=str,
-    default="data\Results",
+    default="data/Results",
     help="path to the segmentation folder",
 )
 

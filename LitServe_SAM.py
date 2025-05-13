@@ -2,6 +2,7 @@ import litserve as ls
 import torch
 # from sam2.sam2_image_predictor import SAM2ImagePredictor
 from segment_anything import SamPredictor, sam_model_registry
+from src.lora import LoRA_sam
 from io import BytesIO
 from PIL import Image
 from fastapi import Response
@@ -14,9 +15,9 @@ import numpy as np
 # )
 models = {"sam-vit_l": "model_checkpoint/sam_vit_l_0b3195.pth",
           "sam-vit_h": "model_checkpoint/sam_vit_h_4b8939.pth",
-          "med_sam-vit_b": "model_checkpoint/MedSAM/medsam_vit_b.pth"}
-          # "sam2-hiera":"model_checkpoint/sam2.1_hiera_small.pt"}
-
+          "med_sam-vit_b": "model_checkpoint/MedSAM/medsam_vit_b.pth",
+          "sam-vit_b-lora512": "model_checkpoint/sam_vit_b_01ec64.pth"}
+lora_parms = {"sam-vit_b-lora512": "model_checkpoint/sam_vit_b-lora512.safetensors"}
 
 def is_tuple_of_ints(var):
     """
@@ -49,6 +50,10 @@ class Sam_API(ls.LitAPI):
             #     predictor = SAM2ImagePredictor(build_sam2(model_cfg, model_checkpoint))
             # else:
             sam = sam_model_registry[model.split("-")[1]](checkpoint=model_checkpoint)
+            if len(model.split("-")) == 3 and model.split("-")[2].startswith("lora"):
+                sam_lora = LoRA_sam(sam, 512)
+                sam_lora.load_lora_parameters(lora_parms[model])
+                sam = sam_lora.sam
             predictor = SamPredictor(sam)
             self.predictors[model] = predictor
 
