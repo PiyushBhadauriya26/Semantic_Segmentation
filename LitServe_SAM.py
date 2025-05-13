@@ -6,6 +6,8 @@ from io import BytesIO
 from PIL import Image
 from fastapi import Response
 import numpy as np
+# from sam2.build_sam import build_sam2
+# from sam2.sam2_image_predictor import SAM2ImagePredictor
 
 # device = torch.device(
 #     'cuda:0' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
@@ -13,6 +15,7 @@ import numpy as np
 models = {"sam-vit_l": "model_checkpoint/sam_vit_l_0b3195.pth",
           "sam-vit_h": "model_checkpoint/sam_vit_h_4b8939.pth",
           "med_sam-vit_b": "model_checkpoint/MedSAM/medsam_vit_b.pth"}
+          # "sam2-hiera":"model_checkpoint/sam2.1_hiera_small.pt"}
 
 
 def is_tuple_of_ints(var):
@@ -41,6 +44,10 @@ class Sam_API(ls.LitAPI):
         # Load the model
         # self.predictor = SAM2ImagePredictor.from_pretrained("facebook/sam2-hiera-large")
         for model, model_checkpoint in models.items():
+            # if model.startswith("sam2"):
+            #     model_cfg = "model_checkpoint/sam2.1_hiera_s.yaml"
+            #     predictor = SAM2ImagePredictor(build_sam2(model_cfg, model_checkpoint))
+            # else:
             sam = sam_model_registry[model.split("-")[1]](checkpoint=model_checkpoint)
             predictor = SamPredictor(sam)
             self.predictors[model] = predictor
@@ -79,18 +86,18 @@ class Sam_API(ls.LitAPI):
             if point1 and point2:  # box input
                 masks, _, _ = self.predictors[model].predict(
                     box=np.array([point1[0], point1[1], point2[0], point2[1]]),
-                    multimask_output=False,
+                    multimask_output=True,
                 )
             elif point1 and not point2:  # point input
                 masks, _, _ = self.predictors[model].predict(
                     point_coords=np.array([[point1[0], point1[1]]]),  # x, y coordinate of the point
                     point_labels=np.array([1]),  # 1 = foreground
-                    multimask_output=False,
+                    multimask_output=True,
                 )
             else:  # no input Auto generate mask using whole image as box
                 masks, _, _ = self.predictors[model].predict(
                     box=np.array([0, 0, original_image.size[0], original_image.size[1]]),
-                    multimask_output=False,
+                    multimask_output=True,
                 )
 
             # Extract the mask
