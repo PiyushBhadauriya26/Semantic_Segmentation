@@ -2,25 +2,28 @@
 
 """
 usage example:
-python batch_Inference_SS.py -i assets/img_demo.png -o ./ --model
-
+python batch_inference.py -i "data/BCSS_small/train/images" --model=sam-vit_l
 """
 
 # %% load environment
 import numpy as np
 import os
-
-join = os.path.join
 import torch
 from segment_anything import sam_model_registry, SamPredictor
 from PIL import Image
 import argparse
-from LitServe_SAM import models
+from LitServe_SAM import models, lora_parms
+from src.lora import LoRA_sam
+
 
 @torch.no_grad()
 def batch_inference(model_name, in_folder, out_folder, overwrite=False):
     model_checkpoint = models[model_name]
     sam = sam_model_registry[model.split("-")[1]](checkpoint=model_checkpoint)
+    if len(model.split("-")) == 3 and model.split("-")[2].startswith("lora"):
+        sam_lora = LoRA_sam(sam, 512)
+        sam_lora.load_lora_parameters(lora_parms[model])
+        sam = sam_lora.sam
     predictor = SamPredictor(sam)
     in_images = [file for file in os.listdir(in_folder) if file.endswith('.png')]
     for image in in_images:
@@ -63,7 +66,7 @@ parser.add_argument(
     "--model",
     type=str,
     default="med_sam-vit_b",
-    help="Name of the model [sam-vit_l, sam-vit_h, med_sam-vit_b]"
+    help="Name of the model [sam-vit_l, sam-vit_h, med_sam-vit_b, sam-vit_b-lora512]"
 )
 args = parser.parse_args()
 device = args.device
