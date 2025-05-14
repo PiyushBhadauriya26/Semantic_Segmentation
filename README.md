@@ -58,3 +58,11 @@ options:
 - Update `config.yaml` for DATASET paths, CHECKPOINT for base sam model and TRAIN setting
 - `python train.py` # Start training.
 - After training lora weights are saved as safetensors file in model_checkpoint folder
+
+### References
+1. https://github.com/facebookresearch/segment-anything
+2. https://github.com/facebookresearch/sam2
+3. https://github.com/bowang-lab/MedSAM
+4. https://github.com/mazurowski-lab/finetune-SAM
+5. https://github.com/WangRongsheng/SAM-fine-tune
+6. https://github.com/Lightning-AI/LitServe
