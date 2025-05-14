@@ -14,11 +14,13 @@
 # limitations under the License.
 import argparse
 import requests
+import os
 from datetime import datetime
 
 # Update this URL to your server's URL if hosted remotely
 API_URL = "http://localhost:8000/predict"
-
+out_folder = "data/server/predict_out/"
+os.makedirs(out_folder, exist_ok=True)
 
 def send_generate_request(image, p1, p2, model, alpha):
     response = requests.post(API_URL, files={"image": image, "p1": (None, p1), "p2": (None, p2),
@@ -28,7 +30,7 @@ def send_generate_request(image, p1, p2, model, alpha):
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").lower()
         filename = f"output-{timestamp}.png"
 
-        with open(filename, "wb") as output_file:
+        with open(os.path.join(out_folder,filename), "wb") as output_file:
             output_file.write(response.content)
 
         print(f"Image saved to {filename}")

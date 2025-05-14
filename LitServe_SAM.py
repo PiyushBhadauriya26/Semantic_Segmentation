@@ -106,8 +106,8 @@ class Sam_API(ls.LitAPI):
                 )
 
             # Extract the mask
-            tp = int(225 * alpha)
-            mask_image = Image.fromarray(((masks[0] * (225 - tp)) + tp).astype(np.uint8))
+            tp = int(255 * alpha)
+            mask_image = Image.fromarray(((masks[0] * (255 - tp)) + tp).astype(np.uint8))
             # Paste the original image into the cutout image, using the mask as the alpha channel
             cutout_image = Image.new('RGBA', original_image.size, color="green")
             cutout_image.paste(original_image, (0, 0), mask=mask_image)
