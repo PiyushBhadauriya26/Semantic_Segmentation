@@ -4,7 +4,7 @@ import torch
 from segment_anything import SamPredictor, sam_model_registry
 from src.lora import LoRA_sam
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageDraw
 from fastapi import Response
 import numpy as np
 # from sam2.build_sam import build_sam2
@@ -89,28 +89,35 @@ class Sam_API(ls.LitAPI):
         with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
             self.predictors[model].set_image(np.array(original_image.convert("RGB")))
             if point1 and point2:  # box input
-                masks, _, _ = self.predictors[model].predict(
+                masks, pred_quality, _ = self.predictors[model].predict(
                     box=np.array([point1[0], point1[1], point2[0], point2[1]]),
                     multimask_output=True,
                 )
             elif point1 and not point2:  # point input
-                masks, _, _ = self.predictors[model].predict(
+                masks, pred_quality, _ = self.predictors[model].predict(
                     point_coords=np.array([[point1[0], point1[1]]]),  # x, y coordinate of the point
                     point_labels=np.array([1]),  # 1 = foreground
                     multimask_output=True,
                 )
             else:  # no input Auto generate mask using whole image as box
-                masks, _, _ = self.predictors[model].predict(
+                masks, pred_quality, _ = self.predictors[model].predict(
                     box=np.array([0, 0, original_image.size[0], original_image.size[1]]),
                     multimask_output=True,
                 )
 
-            # Extract the mask
             tp = int(255 * alpha)
-            mask_image = Image.fromarray(((masks[0] * (255 - tp)) + tp).astype(np.uint8))
+            # Extract the mask with max pred_quality
+            mask_image = Image.fromarray(((masks[np.argmax(pred_quality)] * (255 - tp)) + tp).astype(np.uint8))
             # Paste the original image into the cutout image, using the mask as the alpha channel
             cutout_image = Image.new('RGBA', original_image.size, color="green")
             cutout_image.paste(original_image, (0, 0), mask=mask_image)
+            if point1 and point2:  # box input
+                draw = ImageDraw.Draw(cutout_image)
+                draw.rectangle((point1[0], point1[1], point2[0], point2[1]), outline=(0, 0, 0))
+            if point1 and not point2:  # point input
+                draw = ImageDraw.Draw(cutout_image)
+                # draw.point((point1[0], point1[1]), fill=(0, 0, 0))
+                draw.circle((point1[0], point1[1]),radius=2, fill=(0, 0, 0))
             # cutout_image.show()
             return cutout_image
 

@@ -40,10 +40,10 @@ def send_generate_request(image, p1, p2, model, alpha):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send text & image to server and receive a response.")
-    parser.add_argument("--image", required=True, help="URL for the image file.")
+    parser.add_argument("--image", required=True, help="Path or URL for the image file.")
     parser.add_argument("--p1", required=False, help="Single Point input in '(x,y)' format.")
     parser.add_argument("--p2", required=False, help="Point2 '(x1,y1)' for box input.")
-    parser.add_argument("--model", required=False, help="Model used for inference", default="med_sam-vit_b")
+    parser.add_argument("--model", required=False, help="Name of the model [sam-vit_l, sam-vit_h, med_sam-vit_b, sam-vit_b-lora512]", default="med_sam-vit_b")
     parser.add_argument("--alpha", required=False, help="Transparency mask between 0-1.", default="0.5")
 
     args = parser.parse_args()

@@ -37,7 +37,8 @@ def batch_inference(model_name, in_folder, out_folder, overwrite=False):
                 multimask_output=True
             )
             print(pred_quality)
-        mask_image = Image.fromarray(((masks[0]).astype(np.uint8)))
+
+        mask_image = Image.fromarray(((masks[np.argmax(pred_quality)]).astype(np.uint8)))
         os.makedirs(os.path.join(out_folder, model), exist_ok=True)
         mask_image.save(os.path.join(out_folder, model, image))
 
