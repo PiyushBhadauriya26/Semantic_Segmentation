@@ -26,9 +26,9 @@ optional arguments:
 ```
 response contains segmented image with identified region with no mask and green mask for background region.
 ###### Example
-- `python client.py --image .\data\test1.png --p1 "(60,40)" --p2 "(180,120)" --alpha 0.8`# For best results provide box input with Region of interest.
-- `python client.py --image .\data\test1.png --alpha 0.5 --model "med_sam-vit_b"` # Use med_sam-vit_b model to segmentation whole image  
-- `python client.py --image .\data\test1.png --p1 "(130,80)" --alpha 0.5 --model "med_sam-vit_b"` # Point input 
+- `python client.py --image data/test.png --p1 "(120,70)" --p2 "170,120" --alpha 0.5 --model "sam-vit_l" `# Provide box input with Region of interest.
+- `python client.py --image data/test.png --alpha 0.5 --model "med_sam-vit_b"` # Use med_sam-vit_b model to segment whole image  
+- `python client.py --image data/test.png --p1 "(145,110)" --alpha 0.5 --model sam-vit_b-lora512` # use Point input with FineTuned sam-vit_b-lora512 model 
 
 #### Batch Inference 
 Use `batch_inference.py` script to run inference on multiple images
