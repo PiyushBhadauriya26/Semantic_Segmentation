@@ -118,7 +118,7 @@ class Sam_API(ls.LitAPI):
                 draw = ImageDraw.Draw(cutout_image)
                 # draw.point((point1[0], point1[1]), fill=(0, 0, 0))
                 draw.circle((point1[0], point1[1]),radius=2, fill=(0, 0, 0))
-            # cutout_image.show()
+            cutout_image.show()
             return cutout_image
 
     def encode_response(self, content):
@@ -136,5 +136,5 @@ class Sam_API(ls.LitAPI):
 # Starting the server
 if __name__ == "__main__":
     api = Sam_API()
-    server = ls.LitServer(api, timeout=False, track_requests=True)
+    server = ls.LitServer(api, timeout=False, track_requests=True, model_metadata=models)
     server.run(port=8000)
