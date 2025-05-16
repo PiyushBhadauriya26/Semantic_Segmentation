@@ -60,8 +60,9 @@ class Sam_API(ls.LitAPI):
     def decode_request(self, request):
         print(request)
         try:
-            point1 = tuple(map(int, request["p1"].strip('()').split(','))) if "p1" in request else None
-            point2 = tuple(map(int, request["p2"].strip('()').split(','))) if "p2" in request else None
+            # Allow the point parameters to be (x,y) or [x,y] as well as remove whitespaces, since bash doesn't escape ()s
+            point1 = tuple(map(int, request["p1"].strip('()[] ').split(','))) if "p1" in request else None
+            point2 = tuple(map(int, request["p2"].strip('()[] ').split(','))) if "p2" in request else None
         except:
             return "Invalid input format. Please provide point p1 and p2 in format '(x,y)'"
         alpha = float(request["alpha"]) if "alpha" in request else None
