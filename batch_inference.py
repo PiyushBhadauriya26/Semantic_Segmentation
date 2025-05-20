@@ -51,14 +51,14 @@ parser.add_argument(
     "--data_path",
     type=str,
     default="data/BCSS_small/images",
-    help="path to the data folder",
+    help="path to the data folder. default=data/BCSS_small/images",
 )
 parser.add_argument(
     "-o",
     "--seg_path",
     type=str,
     default="data/Results",
-    help="path to the segmentation folder",
+    help="path to the segmentation folder. default=data/Results",
 )
 
 parser.add_argument("--device", type=str, default="cuda:0", help="device")

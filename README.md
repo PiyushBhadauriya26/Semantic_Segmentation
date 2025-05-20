@@ -39,8 +39,8 @@ run inference on testing set based on MedSAM
 
 options:
   -h, --help                               show this help message and exit
-  -i DATA_PATH, --data_path DATA_PATH      path to the data folder
-  -o SEG_PATH, --seg_path SEG_PATH         path to the segmentation folder
+  -i DATA_PATH, --data_path DATA_PATH      path to the image folder
+  -o SEG_PATH, --seg_path SEG_PATH         path to the segmentation folder. default=data/Results 
   --device DEVICE                          Device cuda or cpu
   --overwrite OVERWRITE                    Overwrite existing results with a new mask.
   --model MODEL                            Name of the model [sam-vit_l, sam-vit_h, med_sam-vit_b, sam-vit_b-lora512]

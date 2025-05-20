@@ -26,17 +26,16 @@ def show_anns(anns):
     ax.imshow(img)
 
 if __name__ == '__main__':
-    image_path = 'cat.png'
+    image_path = 'data/test.png'
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     masks = get_masks(image)
     print(len(masks))
-    print(masks[0].keys())
     plt.figure(figsize=(20, 20))
     plt.imshow(image)
     show_anns(masks)
     plt.axis('off')
-    plt.savefig('../data/server/predict_out/cat.png')
+    plt.savefig('data/server/predict_out/test.png')
     plt.show()
 
 

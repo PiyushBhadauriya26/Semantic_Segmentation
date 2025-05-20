@@ -80,7 +80,7 @@ parser.add_argument(
     "-i",
     "--data_path",
     type=str,
-    default="data/BCSS_small/images/TCGA-A1-A0SK-DX1_xmin45749_ymin25055_MPP-0_0_2016_size224.png",
+    default="data/BCSS_small/images/test2.png",
     help="path to the data folder",
 )
 parser.add_argument(
